@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<meta property="og:title" content="Always Wondered">
+<meta property="og:description" content="The questions you've always wondered about. For the endlessly curious.">
+<meta property="og:image" content="https://alwayswondered.com/assets/banner.jpg">
+<meta property="og:url" content="https://alwayswondered.com">
+<meta name="twitter:card" content="summary_large_image">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Always Wondered</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Always Wondered answers the questions you've always wondered about but never looked up. Animated explainers on science, the human body, history, space and everyday mysteries. For the endlessly curious.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Lexend:wght@300;400;500;700&family=Luckiest+Guy&family=Rubik:wght@500;600;800&display=swap">
+<style>
+/* Layout: a night sky you scroll down through. Glossy violet-to-cobalt neon from the A mark, stars behind everything, bright white video thumbnails popping off the dark like they do in a dark-mode feed. */
+:root{
+  --void:#04030C;
+  --night:#0A0920;
+  --panel:rgba(22,18,58,.55);
+  --rim:rgba(140,110,255,.28);
+  --star:#EDEBFF;
+  --mist:#A9A4D6;
+  --violet:#8B4DFF;
+  --orchid:#C07CFF;
+  --cobalt:#3B3BFF;
+  --electric:#5C7CFF;
+  --ember:#F2A24A;
+  --glow:0 0 24px rgba(123,63,242,.55),0 0 64px rgba(59,59,255,.35);
+  --sheen:linear-gradient(135deg,#D7A6FF 0%,#8B4DFF 32%,#3B3BFF 72%,#6A8CFF 100%);
+  --f-display:"Oswald","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Lexend",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-sheet:"Rubik","Helvetica Neue",Arial,sans-serif;
+  --f-marker:"Luckiest Guy","Marker Felt","Comic Sans MS",cursive;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--void)}
+body{background:var(--void);color:var(--star);font-family:var(--f-body);font-size:17px;line-height:1.6;font-weight:300;overflow-x:hidden}
+a{color:inherit}
+.wrap{position:relative;max-width:1180px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+:focus-visible{outline:2px solid var(--orchid);outline-offset:4px;border-radius:8px}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+main,footer,header{position:relative;z-index:1}
+
+/* ---------- header ---------- */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--void)}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:rgba(4,3,12,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--rim)}
+.top .wrap{display:flex;align-items:center;gap:20px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand img{width:50px;height:auto;flex:none}
+.brand span{font-family:var(--f-display);font-weight:700;font-size:1.25rem;letter-spacing:.06em;line-height:1}
+.nav{display:flex;gap:26px;margin-left:auto;align-items:center}
+.nav a{text-decoration:none;font-weight:400;font-size:.92rem;color:var(--mist);transition:color .2s}
+.nav a:not(.btn):hover{color:var(--star)}
+@media (max-width:760px){.nav a:not(.btn){display:none}}
+
+.btn{position:relative;display:inline-flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:600;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:#fff;background:var(--sheen);padding:13px 26px;border-radius:14px;border:1px solid rgba(220,200,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -6px 14px rgba(20,10,120,.45),var(--glow);transition:transform .2s ease,box-shadow .2s ease,filter .2s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -6px 14px rgba(20,10,120,.45),0 0 32px rgba(139,77,255,.75),0 0 90px rgba(59,59,255,.45)}
+.btn.ghost{background:rgba(20,16,52,.6);border-color:var(--rim);box-shadow:none;color:var(--star)}
+.btn.ghost:hover{border-color:var(--orchid);box-shadow:0 0 24px rgba(139,77,255,.35)}
+.btn.sm{font-size:.85rem;padding:9px 18px;border-radius:12px}
+.btn svg{width:22px;height:22px;flex:none}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden}
+.hero-copy{text-align:center;padding-block:72px 0;position:relative;z-index:2}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:500;font-size:.82rem;letter-spacing:.38em;text-transform:uppercase;color:var(--orchid);margin:0 0 22px}
+.eyebrow::before,.eyebrow::after{content:"";width:36px;height:1px;background:linear-gradient(90deg,transparent,var(--orchid))}
+.eyebrow::after{transform:scaleX(-1)}
+.hero h1{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(2.7rem,7.2vw,6rem);line-height:.98;letter-spacing:.01em;margin:0 auto 22px;max-width:16ch;text-wrap:balance}
+.glow{background:var(--sheen);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 22px rgba(139,77,255,.55))}
+.hero p.lede{font-size:1.16rem;color:var(--mist);max-width:44ch;margin:0 auto 32px}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
+.scene{position:relative;z-index:1;margin-top:-9vw;pointer-events:none}
+.scene img{display:block;width:100%;height:auto;max-width:none;-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 22%,#000 72%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0%,#000 22%,#000 72%,transparent 100%)}
+@media (max-width:760px){
+  .hero-copy{padding-block:44px 0}
+  .scene{margin-top:-6vw}
+  .scene img{width:175%;margin-left:-37.5%}
+}
+
+/* ticker */
+.ticker{position:relative;z-index:1;border-block:1px solid var(--rim);background:linear-gradient(90deg,rgba(139,77,255,.16),rgba(59,59,255,.16));overflow:hidden;white-space:nowrap}
+.ticker .row{display:inline-flex;gap:40px;padding-block:14px;font-family:var(--f-display);font-weight:500;font-size:1rem;letter-spacing:.14em;color:var(--mist)}
+.ticker .row span::after{content:"?";margin-left:40px;color:var(--orchid);text-shadow:0 0 12px var(--violet)}
+@media (prefers-reduced-motion:no-preference){.ticker .row{animation:slide 60s linear infinite}}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* ---------- sections ---------- */
+section.block{padding-block:88px}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:38px}
+.sec-head .label{font-family:var(--f-display);font-weight:500;font-size:.78rem;letter-spacing:.34em;text-transform:uppercase;color:var(--orchid);margin:0 0 10px}
+.sec-head h2{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(2.1rem,4.6vw,3.4rem);line-height:1;letter-spacing:.01em;margin:0;text-wrap:balance}
+.sec-head p{margin:12px 0 0;color:var(--mist);max-width:52ch}
+
+/* ---------- videos ---------- */
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px}
+.card{display:flex;flex-direction:column;gap:16px;text-decoration:none;min-width:0}
+.thumb{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 40px rgba(0,0,0,.5);transition:transform .25s ease,box-shadow .25s ease}
+.card:hover .thumb{transform:translateY(-4px);box-shadow:0 0 0 1px rgba(192,124,255,.6),0 0 34px rgba(139,77,255,.55),0 0 80px rgba(59,59,255,.3)}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.thumb .art{position:absolute;inset:0}
+.thumb .art svg{display:block;width:100%;height:100%}
+.fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:18px;text-align:center;background:radial-gradient(ellipse at 50% 30%,rgba(139,77,255,.45),rgba(10,9,32,1) 70%)}
+.fallback img{position:static;width:34%;height:auto}
+.fallback span{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.03em;font-size:clamp(.9rem,2vw,1.4rem);line-height:1.1;max-width:24ch}
+.nextbox{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:18px;text-align:center;background:#fff;color:#111;border:0!important}
+.nextbox img{position:static;width:auto;height:110px;max-height:55%;object-fit:contain;margin-bottom:6px}
+.nextbox .qmark{font-family:var(--f-marker);font-size:3rem;line-height:1;color:var(--orchid);text-shadow:0 0 18px var(--violet)}
+.nextbox b{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:1.1rem}
+.nextbox small{color:#4A4458;font-size:.85rem;max-width:26ch}
+.card.next{align-self:start}
+.dur{position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.82);color:#fff;font-size:.76rem;font-weight:500;padding:2px 8px;border-radius:6px;font-variant-numeric:tabular-nums}
+.soon{position:absolute;left:10px;bottom:10px;background:var(--sheen);color:#fff;font-family:var(--f-display);font-weight:600;font-size:.7rem;letter-spacing:.14em;padding:3px 10px;border-radius:7px;box-shadow:0 0 14px rgba(139,77,255,.6)}
+.play{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transition:opacity .2s;background:radial-gradient(circle,rgba(4,3,12,.35),transparent 70%)}
+.play i{width:62px;height:62px;border-radius:50%;background:var(--sheen);display:grid;place-items:center;box-shadow:var(--glow)}
+.play i::before{content:"";border-left:19px solid #fff;border-top:11px solid transparent;border-bottom:11px solid transparent;margin-left:5px}
+.card:hover .play{opacity:1}
+.meta{display:flex;flex-direction:column;gap:5px;min-width:0}
+.angle{font-family:var(--f-display);font-size:.74rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--orchid)}
+.card h3{margin:0;font-size:1.12rem;font-weight:500;line-height:1.32;text-wrap:balance}
+.card .twist{margin:0;color:var(--mist);font-size:.93rem}
+.card.feature{grid-column:span 2;grid-row:span 2}
+.card.feature h3{font-size:1.55rem}
+@media (max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.card.feature{grid-column:span 2;grid-row:auto}}
+@media (max-width:560px){.grid{grid-template-columns:1fr}.card.feature{grid-column:auto}}
+
+/* ---------- how an episode works: a constellation ---------- */
+.arc{border-block:1px solid var(--rim);background:radial-gradient(ellipse 80% 70% at 50% 0%,rgba(91,50,220,.22),transparent 70%)}
+.steps{position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px;list-style:none;padding:0;margin:0;counter-reset:s}
+.steps::before{content:"";position:absolute;left:4%;right:4%;top:15px;height:1px;background:linear-gradient(90deg,transparent,var(--orchid) 12%,var(--electric) 88%,transparent);opacity:.7}
+.steps li{position:relative;padding-top:48px;min-width:0;counter-increment:s}
+.steps li::before{content:"";position:absolute;top:9px;left:0;width:13px;height:13px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(139,77,255,.35),0 0 18px 4px var(--violet)}
+.steps li::after{content:"0" counter(s);position:absolute;top:2px;left:26px;font-family:var(--f-display);font-size:.8rem;letter-spacing:.2em;color:var(--mist)}
+.steps b{display:block;font-family:var(--f-display);font-weight:600;font-size:1.12rem;letter-spacing:.05em;text-transform:uppercase;line-height:1.1;margin-bottom:8px}
+.steps span{font-size:.9rem;color:var(--mist);line-height:1.5;display:block}
+@media (max-width:980px){.steps{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:34px}.steps::before{display:none}}
+@media (max-width:520px){.steps{grid-template-columns:1fr 1fr}}
+.example{margin:46px 0 0;padding:26px 30px;border-radius:18px;background:var(--panel);border:1px solid var(--rim);font-size:1.22rem;line-height:1.5;max-width:62ch;font-weight:300}
+.example small{display:block;font-family:var(--f-display);font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;color:var(--orchid);margin-bottom:10px}
+.example em{font-style:normal;font-weight:500;color:#fff;text-shadow:0 0 16px rgba(139,77,255,.8)}
+
+/* ---------- socials ---------- */
+.socials{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
+.soc{position:relative;display:flex;flex-direction:column;gap:14px;padding:26px 24px 24px;border-radius:20px;text-decoration:none;background:var(--panel);border:1px solid var(--rim);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:transform .25s ease,border-color .25s,box-shadow .25s;min-width:0;overflow:hidden}
+.soc::before{content:"";position:absolute;inset:-40% -40% auto auto;width:180px;height:180px;border-radius:50%;background:var(--c);opacity:.16;filter:blur(40px)}
+a.soc:hover{transform:translateY(-4px);border-color:var(--c);box-shadow:0 0 34px color-mix(in srgb,var(--c) 45%,transparent)}
+.soc .ico{position:relative;width:56px;height:56px;border-radius:16px;background:linear-gradient(145deg,color-mix(in srgb,var(--c) 85%,#fff),var(--c) 55%,color-mix(in srgb,var(--c) 70%,#000));display:grid;place-items:center;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 0 22px color-mix(in srgb,var(--c) 55%,transparent)}
+.soc .ico svg{width:27px;height:27px}
+.soc h3{margin:0;font-family:var(--f-display);font-weight:600;font-size:1.45rem;letter-spacing:.04em;text-transform:uppercase;line-height:1}
+.soc .handle{font-size:.9rem;color:var(--mist);overflow-wrap:anywhere}
+.soc .go{margin-top:auto;font-family:var(--f-display);font-weight:500;letter-spacing:.12em;text-transform:uppercase;font-size:.82rem}
+.soc.off{border-style:dashed}
+.soc .tag{position:absolute;top:18px;right:18px;font-family:var(--f-display);font-weight:600;font-size:.66rem;letter-spacing:.18em;color:var(--star);border:1px solid var(--rim);padding:3px 9px;border-radius:999px;background:rgba(4,3,12,.5)}
+@media (max-width:900px){.socials{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:420px){.socials{grid-template-columns:1fr}}
+
+/* ---------- about ---------- */
+.about .wrap{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:center}
+.sheet{position:relative;background:#fff;border-radius:22px;padding:26px 26px 18px;max-width:340px;width:100%;justify-self:center;box-shadow:0 0 0 1px rgba(255,255,255,.2),0 0 60px rgba(139,77,255,.45),0 0 140px rgba(59,59,255,.25);transform:rotate(-2deg)}
+.sheet img{display:block;width:84%;height:auto;margin:0 auto}
+.sheet p{margin:10px 0 0;text-align:center;font-family:var(--f-sheet);font-weight:800;color:#111;font-size:1.35rem;letter-spacing:.01em;line-height:1}
+.sheet .q{position:absolute;right:22px;top:18px;font-family:var(--f-marker);color:#7B3FF2;font-size:2.2rem;line-height:1}
+.about h2{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(2.1rem,4.6vw,3.4rem);line-height:1;margin:0 0 20px;text-wrap:balance}
+.about p.body{max-width:58ch;margin:0 0 16px;color:var(--mist)}
+.topics{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;padding:0;list-style:none}
+.topics li{border:1px solid var(--rim);border-radius:999px;padding:5px 15px;font-size:.88rem;background:rgba(20,16,52,.6);color:var(--star)}
+@media (max-width:820px){.about .wrap{grid-template-columns:1fr}.sheet{max-width:250px}}
+
+/* ---------- subscribe band ---------- */
+.band{position:relative;overflow:hidden;border-top:1px solid var(--rim)}
+.band::before{content:"";position:absolute;left:50%;top:50%;width:900px;height:420px;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(139,77,255,.35),rgba(59,59,255,.15) 45%,transparent 70%);pointer-events:none}
+.band .wrap{display:flex;flex-direction:column;align-items:center;text-align:center;gap:26px;padding-block:96px}
+.band img{width:190px;height:auto}
+.band h2{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(2rem,4.6vw,3.3rem);margin:0;line-height:1.02;max-width:22ch;text-wrap:balance}
+
+footer{padding-block:30px;font-size:.86rem;color:var(--mist);border-top:1px solid var(--rim)}
+footer .wrap{display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap;align-items:center}
+footer .tagline{font-family:var(--f-display);letter-spacing:.3em;text-transform:uppercase;font-size:.72rem}
+footer nav{display:flex;gap:18px;flex-wrap:wrap}
+footer a{text-decoration:none}
+footer a:hover{color:var(--star)}
+</style>
+
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Always Wondered home">
+      <img src="assets/logo.png" alt="" width="640" height="425">
+      <span>ALWAYS WONDERED</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#videos">Videos</a>
+      <a href="#follow">Follow</a>
+      <a href="#about">About</a>
+      <a class="btn sm" href="https://www.youtube.com/@AlwaysWonderedReal?sub_confirmation=1" target="_blank" rel="noopener">Subscribe</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-copy">
+      <p class="eyebrow">For the endlessly curious</p>
+      <h1>The questions you've <span class="glow">always wondered</span> about</h1>
+      <p class="lede">Animated explainers on space, the human body, history, the mind and everyday mysteries. One question per video. A real answer that's stranger than you thought.</p>
+      <div class="ctas">
+        <a class="btn" href="https://www.youtube.com/@AlwaysWonderedReal" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8ZM9.75 15.02V8.98L15.5 12l-5.75 3.02Z"/></svg>
+          Watch on YouTube
+        </a>
+        <a class="btn ghost" href="#videos">Latest videos</a>
+      </div>
+    </div>
+    <div class="scene" aria-hidden="true">
+      <img src="assets/banner.jpg" alt="" width="2560" height="1532">
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true"><div class="row" id="ticker"></div></div>
+
+  <section class="block" id="videos">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="label">Now playing</p>
+          <h2>Latest videos</h2>
+          <p>Fresh out of the studio. Tap any episode to watch it on YouTube.</p>
+        </div>
+        <a class="btn ghost sm" href="https://www.youtube.com/@AlwaysWonderedReal/videos" target="_blank" rel="noopener">All videos</a>
+      </div>
+      <div class="grid" id="videoGrid"></div>
+    </div>
+  </section>
+
+
+  <section class="block" id="follow">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="label">Find us</p>
+          <h2>Wonder with us everywhere</h2>
+          <p>Full episodes on YouTube. Quick answers and Shorts everywhere else.</p>
+        </div>
+      </div>
+      <div class="socials" id="socialGrid"></div>
+    </div>
+  </section>
+
+  <section class="block about" id="about">
+    <div class="wrap">
+      <div class="sheet"><img src="assets/wonderer/explaining.png" alt="The Wonderer explaining something" width="460" height="440"><p>THE WONDERER</p></div>
+      <div>
+        <p class="sec-head label" style="margin:0 0 10px;font-family:var(--f-display);font-size:.78rem;letter-spacing:.34em;text-transform:uppercase;color:var(--orchid)">About the channel</p>
+        <h2>Meet the <span class="glow">Wonderer</span></h2>
+        <p class="body">The little stick figure with the big round head is your guide. He's curious, easily surprised, and asks the questions most people keep to themselves.</p>
+        <p class="body">Always Wondered is for the things you've puzzled over in the shower and never looked up. Every topic passes three tests: a normal person has wondered it, the real answer is surprising, and it will still be true in ten years.</p>
+        <ul class="topics" aria-label="Topics we cover">
+          <li>Space</li><li>The human body</li><li>How things work</li><li>Psychology</li><li>History</li><li>Nature</li><li>Science</li><li>Everyday mysteries</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <img src="assets/logo.png" alt="" width="640" height="425">
+      <h2>If you've always wondered, you're in the <span class="glow">right place</span></h2>
+      <a class="btn" href="https://www.youtube.com/@AlwaysWonderedReal?sub_confirmation=1" target="_blank" rel="noopener">Subscribe on YouTube</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr">2026</span> Always Wondered · alwayswondered.com</span>
+    <span class="tagline">For the endlessly curious</span>
+    <nav aria-label="Social links" id="footSocial"></nav>
+  </div>
+</footer>
+
+<script>
+/* =====================================================================
+   EDIT HERE — the only part you need to touch to update the site.
+   ===================================================================== */
+
+/* Social accounts. Leave url as "" to show "Coming soon". */
+const SOCIALS = [
+  { key:"youtube",   name:"YouTube",   handle:"@AlwaysWonderedReal", url:"https://www.youtube.com/@AlwaysWonderedReal", color:"#FF3B4E", cta:"Full episodes" },
+  { key:"tiktok",    name:"TikTok",    handle:"@alwayswondered",     url:"", color:"#1FC8D8", cta:"60-second answers" },
+  { key:"instagram", name:"Instagram", handle:"@alwayswondered",     url:"", color:"#C04CFF", cta:"Reels + behind the scenes" },
+  { key:"facebook",  name:"Facebook",  handle:"Always Wondered",     url:"", color:"#3B6CFF", cta:"Episodes + community" }
+];
+
+/* Latest videos, newest first. The first one is featured large.
+   On the live site these are replaced automatically by videos.json, which a
+   GitHub Action pulls from youtube.com/@AlwaysWonderedReal every few hours.
+   Add a "length" here if you want a duration badge on a video. */
+const VIDEOS = [
+  { id:"mxwy4RGiLXU", title:"Why Time Feels Faster as You Get Older (It's Not What You Think)", length:"5:48" }
+];
+
+/* =====================================================================
+   Below here: drawing + rendering. No need to edit.
+   ===================================================================== */
+
+/* The Wonderer — solid black head, white oval eyes, white highlight, thick rounded limbs. */
+function wonderer(pose, opts={}){
+  const ink = "#111", w = "#fff", v = "#7B3FF2";
+  const limb = `stroke="${ink}" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"`;
+  let arms = "", mouth = "", extras = "", headTilt = 0, brows = "";
+  const hand = (x,y)=>`<circle cx="${x}" cy="${y}" r="7.5" fill="${ink}"/>`;
+  switch(pose){
+    case "surprised":
+      arms = `<path d="M60 96 L34 84 L22 62" ${limb}/>${hand(22,60)}<path d="M60 96 L86 84 L98 62" ${limb}/>${hand(98,60)}`;
+      mouth = `<ellipse cx="60" cy="60" rx="6" ry="7.5" fill="${w}"/>`;
+      brows = `<path d="M42 28 q6 -5 12 -1 M66 27 q6 -4 12 1" stroke="${w}" stroke-width="3" stroke-linecap="round" fill="none"/>`;
+      extras = `<g stroke="${v}" stroke-width="4.5" stroke-linecap="round"><path d="M14 30 L4 24"/><path d="M12 44 L1 44"/><path d="M106 30 L116 24"/><path d="M108 44 L119 44"/><path d="M60 4 L60 -6"/></g>`;
+      break;
+    case "excited":
+      arms = `<path d="M60 96 L38 74 L28 46" ${limb}/>${hand(27,43)}<path d="M60 96 L82 74 L92 46" ${limb}/>${hand(93,43)}`;
+      mouth = `<path d="M47 56 Q60 72 73 56 Z" fill="${w}"/>`;
+      extras = `<g stroke="${v}" stroke-width="4.5" stroke-linecap="round"><path d="M10 26 L0 18"/><path d="M110 26 L120 18"/><path d="M8 58 L-2 60"/><path d="M112 58 L122 60"/><path d="M60 4 L60 -6"/><path d="M28 6 L22 -2"/><path d="M92 6 L98 -2"/></g>`;
+      break;
+    case "confused":
+      headTilt = -12;
+      arms = `<path d="M60 96 L40 116 L36 136" ${limb}/>${hand(36,138)}<path d="M60 96 L90 82 L92 46" ${limb}/>${hand(92,42)}`;
+      mouth = `<path d="M50 62 q5 -4 10 0 t10 0" stroke="${w}" stroke-width="3.2" stroke-linecap="round" fill="none"/>`;
+      brows = `<path d="M42 30 l11 3 M67 26 q6 -3 11 2" stroke="${w}" stroke-width="3" stroke-linecap="round" fill="none"/>`;
+      extras = `<text x="104" y="22" font-family="Luckiest Guy, cursive" font-size="30" fill="${v}">?</text>`;
+      break;
+    case "explaining":
+      arms = `<path d="M60 96 L44 112 L52 124" ${limb}/>${hand(53,125)}<path d="M60 96 L88 96 L110 84" ${limb}/>${hand(112,83)}`;
+      mouth = `<path d="M50 58 Q60 66 70 58" stroke="${w}" stroke-width="3.4" stroke-linecap="round" fill="none"/>`;
+      break;
+    default: /* thinking */
+      arms = `<path d="M60 96 L42 116 L40 138" ${limb}/>${hand(40,140)}<path d="M60 96 L84 108 L70 82" ${limb}/>${hand(68,80)}`;
+      mouth = `<path d="M50 61 L62 59" stroke="${w}" stroke-width="3.2" stroke-linecap="round" fill="none"/>`;
+      brows = `<path d="M42 30 q6 -3 12 0 M66 28 l12 -2" stroke="${w}" stroke-width="3" stroke-linecap="round" fill="none"/>`;
+  }
+  const cls = opts.cls ? ` class="${opts.cls}"` : "";
+  return `<svg${cls} viewBox="-6 -12 132 190" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    ${extras}
+    <path d="M60 80 L60 128" ${limb}/>
+    <path d="M60 126 L46 160" ${limb}/><path d="M60 126 L74 160" ${limb}/>
+    <ellipse cx="40" cy="164" rx="12" ry="7" fill="${ink}"/><ellipse cx="80" cy="164" rx="12" ry="7" fill="${ink}"/>
+    ${arms}
+    <g transform="rotate(${headTilt} 60 44)">
+      <circle cx="60" cy="44" r="36" fill="${ink}"/>
+      <path d="M33 30 Q38 15 54 11" stroke="${w}" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+      <ellipse cx="48" cy="42" rx="5.5" ry="9" fill="${w}"/><ellipse cx="72" cy="42" rx="5.5" ry="9" fill="${w}"/>
+      ${brows}${mouth}
+    </g>
+  </svg>`;
+}
+
+/* Drawn thumbnail in the channel's style: flat color, ALL CAPS marker text, one big Wonderer reaction. */
+function drawnThumb(a){
+  let bg = `<rect width="320" height="180" fill="${a.bg}"/>`;
+  if(a.ground) bg += `<rect y="140" width="320" height="40" fill="${a.ground}"/><path d="M0 140 H320" stroke="#111" stroke-width="3"/>`;
+  if(a.stars){
+    const pts=[[30,60],[70,120],[110,40],[250,130],[290,50],[200,150],[150,110],[270,95]];
+    bg += pts.map(([x,y],i)=>`<path transform="translate(${x} ${y}) scale(${i%2?0.7:1})" d="M0 -8 L2.4 -2.4 8 0 2.4 2.4 0 8 -2.4 2.4 -8 0 -2.4 -2.4Z" fill="#F5C518"/>`).join("");
+  }
+  const fig = wonderer(a.pose).replace('<svg ','<svg x="168" y="30" width="118" height="150" ');
+  const stroke = (a.bg === "#FFFFFF" || a.bg === "#F5C518" || a.bg === "#6EB5E8") ? "" : "";
+  return `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${a.text}">
+    ${bg}
+    <text x="22" y="60" font-family="Luckiest Guy, cursive" font-size="${a.text.length>8?34:40}" fill="${a.textColor}" transform="rotate(-4 22 60)">${a.text}</text>
+    <path d="M24 74 C60 66 100 78 140 70" stroke="#7B3FF2" stroke-width="5" stroke-linecap="round" fill="none"/>
+    ${fig}
+  </svg>`;
+}
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const CHANNEL = SOCIALS.find(s=>s.key==="youtube").url;
+
+/* Thumbnail order: YouTube's live full-size image (so a thumbnail you change on YouTube shows here too), then YouTube's smaller one, then the backup copy in assets/thumbs/. */
+function thumbNext(img){
+  const id=img.dataset.yt, step=+(img.dataset.step||0);
+  const next=[`https://i.ytimg.com/vi/${id}/hqdefault.jpg`,`assets/thumbs/${id}.jpg`][step];
+  if(next){img.dataset.step=step+1; img.src=next;} else img.remove();
+}
+function fallbackThumb(title){
+  return `<div class="fallback"><img src="assets/logo.png" alt=""><span>${esc(title)}</span></div>`;
+}
+function renderVideos(){
+  const grid = document.getElementById("videoGrid");
+  const list = VIDEOS.filter(v=>v.id).slice(0,6);
+  let html = list.map((vd,i)=>{
+    const id = encodeURIComponent(vd.id);
+    return `<a class="card${i===0?' feature':''}" href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">
+      <div class="thumb">
+        ${fallbackThumb(vd.title)}
+        <img src="https://i.ytimg.com/vi/${id}/maxresdefault.jpg" alt="" loading="lazy" data-yt="${id}" onerror="thumbNext(this)">
+        ${vd.length?`<span class="dur">${esc(vd.length)}</span>`:""}
+        <span class="play"><i></i></span>
+      </div>
+      <div class="meta">
+        ${i===0?'<span class="angle">Newest episode</span>':''}
+        <h3>${esc(vd.title)}</h3>
+      </div>
+    </a>`;
+  }).join("");
+  if(list.length < 3){
+    html += `<a class="card next" href="https://www.youtube.com/@AlwaysWonderedReal?sub_confirmation=1" target="_blank" rel="noopener">
+      <div class="thumb nextbox"><img src="assets/wonderer/thinking.png" alt=""><b>Next question loading</b><small>New episodes every week. Subscribe so you don't miss one.</small></div>
+    </a>`;
+  }
+  grid.innerHTML = html;
+}
+
+const ICONS = {
+  youtube:`<svg viewBox="0 0 24 24"><path fill="currentColor" d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8ZM9.75 15.02V8.98L15.5 12l-5.75 3.02Z"/></svg>`,
+  tiktok:`<svg viewBox="0 0 24 24"><path fill="currentColor" d="M16.6 2h-3.3v13.2a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9a6.3 6.3 0 1 0 5.3 6.2V8.6a7.7 7.7 0 0 0 4.4 1.4V6.7a4.4 4.4 0 0 1-4.4-4.4V2Z"/></svg>`,
+  instagram:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>`,
+  facebook:`<svg viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 22v-8.2h2.8l.4-3.3h-3.2V8.4c0-.9.3-1.6 1.6-1.6h1.7V3.9c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.3v3.3h2.8V22h3.4Z"/></svg>`
+};
+
+function renderSocials(){
+  document.getElementById("socialGrid").innerHTML = SOCIALS.map(s=>{
+    const on = !!s.url;
+    const inner = `${on?"":`<span class="tag">SOON</span>`}
+      <span class="ico" style="--c:${s.color}">${ICONS[s.key]}</span>
+      <h3>${esc(s.name)}</h3>
+      <span class="handle">${esc(s.handle)} · ${esc(s.cta)}</span>
+      <span class="go">${on?"Follow →":"Launching soon"}</span>`;
+    return on
+      ? `<a class="soc" style="--c:${s.color}" href="${esc(s.url)}" target="_blank" rel="noopener">${inner}</a>`
+      : `<div class="soc off" style="--c:${s.color}">${inner}</div>`;
+  }).join("");
+  document.getElementById("footSocial").innerHTML = SOCIALS.filter(s=>s.url).map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a>`).join("");
+}
+
+function renderTicker(){
+  const qs = ["How were the pyramids really built","Why do your fingers wrinkle in water","How did sailors navigate before GPS","Where does a lightning bolt start","Why did the Roman Empire fall","Why do you yawn when others yawn","How did people tell time before clocks","Why is the ocean salty","Who drew the first map of the world","How do bees know where home is","Why did the Library of Alexandria disappear","Could you dig through the Earth","How did Vikings cross the Atlantic","Why do cats purr"];
+  const row = qs.map(q=>`<span>${q.toUpperCase()}</span>`).join("");
+  document.getElementById("ticker").innerHTML = row + row;
+}
+
+document.getElementById("yr").textContent = new Date().getFullYear();
+renderVideos(); renderSocials(); renderTicker();
+
+/* Newest uploads: videos.json is refreshed from the YouTube channel every few hours by a GitHub Action. */
+fetch("videos.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(list=>{
+  if(!Array.isArray(list)||!list.length) return;
+  const known=Object.fromEntries(VIDEOS.map(v=>[v.id,v]));
+  VIDEOS.splice(0,VIDEOS.length,...list.map(v=>({...(known[v.id]||{}),...v,length:v.length||(known[v.id]||{}).length||""})));
+  renderVideos();
+}).catch(()=>{});
+
+/* Twinkling starfield behind the page */
+(function(){
+  const c=document.getElementById("sky"), x=c.getContext("2d");
+  const still=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let W,H,stars=[];
+  function size(){
+    const d=Math.min(devicePixelRatio||1,2);
+    W=c.width=innerWidth*d; H=c.height=innerHeight*d;
+    const n=Math.round(innerWidth*innerHeight/5200);
+    stars=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,r:(Math.random()*1.1+.25)*d,p:Math.random()*6.28,s:.4+Math.random()*1.4,h:Math.random()<.18?(Math.random()<.5?"192,124,255":"110,140,255"):"237,235,255"}));
+  }
+  function draw(t){
+    x.clearRect(0,0,W,H);
+    for(const s of stars){
+      const a=still?.7:.35+.65*Math.abs(Math.sin(s.p+t*.0006*s.s));
+      x.fillStyle=`rgba(${s.h},${a})`; x.beginPath(); x.arc(s.x,s.y,s.r,0,6.283); x.fill();
+    }
+    if(!still) requestAnimationFrame(draw);
+  }
+  size(); addEventListener("resize",()=>{size(); if(still) draw(0)}); draw(0);
+})();
+</script>
+
+</body>
+</html>
