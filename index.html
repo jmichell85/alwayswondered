@@ -177,7 +177,8 @@ a.soc:hover{transform:translateY(-4px);border-color:var(--c);box-shadow:0 0 34px
 .band{position:relative;overflow:hidden;border-top:1px solid var(--rim)}
 .band::before{content:"";position:absolute;left:50%;top:50%;width:900px;height:420px;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(139,77,255,.35),rgba(59,59,255,.15) 45%,transparent 70%);pointer-events:none}
 .band .wrap{display:flex;flex-direction:column;align-items:center;text-align:center;gap:26px;padding-block:96px}
-.band img{width:190px;height:auto}
+#sting{width:300px;max-width:80%;aspect-ratio:1;height:auto;margin:-60px 0 -70px;cursor:pointer}
+.band .sting-fallback{width:190px;height:auto}
 .band h2{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(2rem,4.6vw,3.3rem);margin:0;line-height:1.02;max-width:22ch;text-wrap:balance}
 
 footer{padding-block:30px;font-size:.86rem;color:var(--mist);border-top:1px solid var(--rim)}
@@ -271,7 +272,7 @@ footer a:hover{color:var(--star)}
 
   <section class="band">
     <div class="wrap">
-      <img src="assets/logo.png" alt="" width="640" height="425">
+      <canvas id="sting" width="720" height="720" role="img" aria-label="Always Wondered logo"></canvas>
       <h2>If you've always wondered, you're in the <span class="glow">right place</span></h2>
       <a class="btn" href="https://www.youtube.com/@AlwaysWonderedReal?sub_confirmation=1" target="_blank" rel="noopener">Subscribe on YouTube</a>
     </div>
@@ -553,6 +554,144 @@ fetch("videos.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(list=>{
     if(!still) requestAnimationFrame(draw);
   }
   size(); addEventListener("resize",()=>{size(); if(still) draw(0)}); draw(0);
+})();
+
+/* Animated AW logo sting in the subscribe section.
+   Plays once each time the section scrolls into view, then holds on the lit logo.
+   The logo's black background is keyed out to transparency when it loads. */
+(function(){
+  const cv = document.getElementById('sting');
+  if (!cv || !cv.getContext) return;
+  const ctx = cv.getContext('2d');
+  const hasFilter = 'filter' in ctx;
+  const U = 1408, DUR = 5.2, END_HOLD = 4.6, LAND = 1.62;
+  const NIB = { x: 650, y: 462, w: 112, h: 153, foot: 600 };
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const prog = (t, a, b) => clamp((t - a) / (b - a));
+  const outCubic = x => 1 - Math.pow(1 - x, 3);
+  const outExpo = x => x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
+  const inCubic = x => x * x * x;
+  const load = s => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = s; });
+  let IMG, BLOOM, SWEEP;
+
+  function flicker(t) {
+    const k = [[0.25, 0], [0.30, .55], [0.36, .08], [0.44, .75], [0.50, .25], [0.58, .9], [0.95, 1]];
+    if (t < k[0][0]) return 0;
+    for (let i = 0; i < k.length - 1; i++) {
+      if (t < k[i + 1][0]) return i % 2 ? k[i][1] : k[i][1] + (k[i + 1][1] - k[i][1]) * prog(t, k[i][0], k[i + 1][0]);
+    }
+    return 1;
+  }
+
+  function render(t) {
+    const S = cv.width / U;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1; if (hasFilter) ctx.filter = 'none';
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    ctx.setTransform(S, 0, 0, S, 0, 0);
+    const on = flicker(t);
+
+    const amb = 0.35 * outCubic(prog(t, 0.3, 1.6)) + 0.25 * Math.exp(-Math.max(0, t - LAND) * 3) * (t > LAND);
+    const rg = ctx.createRadialGradient(704, 720, 0, 704, 720, 760);
+    rg.addColorStop(0, `rgba(70,40,200,${0.35 * amb})`); rg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = rg; ctx.fillRect(0, 0, U, U);
+
+    const sc = 0.9 + 0.1 * outExpo(prog(t, 0.25, 1.5));
+    const blur = 18 * (1 - outCubic(prog(t, 0.25, 1.15)));
+    const kick = t > LAND ? 1 + 0.012 * Math.exp(-(t - LAND) * 9) * Math.sin((t - LAND) * 40) : 1;
+    ctx.save();
+    ctx.translate(704, 704); ctx.scale(sc * kick, sc * kick); ctx.translate(-704, -704);
+    ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = on;
+    if (hasFilter && blur > 0.3) ctx.filter = `blur(${blur * S * 1408 / 1080}px)`;
+    ctx.drawImage(IMG.base, 0, 0, U, U);
+    if (hasFilter) ctx.filter = 'none';
+
+    const breathe = 0.16 + 0.06 * Math.sin((t - 2) * 2.4);
+    const surge = 0.5 * Math.exp(-Math.pow((t - 0.62) / 0.22, 2));
+    const pulse = t > LAND ? 0.55 * Math.exp(-(t - LAND) * 5) : 0;
+    ctx.globalAlpha = clamp(breathe * prog(t, 0.6, 1.4) + surge + pulse);
+    ctx.drawImage(BLOOM, 0, 0, U, U);
+
+    const nibIn = prog(t, 1.2, 1.35);
+    if (nibIn > 0) {
+      const fall = prog(t, 1.22, LAND);
+      const dy = -380 * (1 - inCubic(fall));
+      let sx = 1, sy = 1;
+      if (t >= LAND) { const k = t - LAND, s = 0.2 * Math.exp(-k * 7) * Math.cos(k * 26); sy = 1 - s; sx = 1 + s * 0.6; }
+      else { sy = 1 + 0.12 * fall * fall; sx = 1 - 0.05 * fall * fall; }
+      const drawNib = (oy, a) => {
+        ctx.save();
+        ctx.translate(706, NIB.foot + dy + oy); ctx.scale(sx, sy); ctx.translate(-706, -NIB.foot);
+        ctx.globalAlpha = a; ctx.globalCompositeOperation = 'source-over';
+        ctx.drawImage(IMG.nib, NIB.x, NIB.y, NIB.w, NIB.h);
+        ctx.restore();
+      };
+      if (t < LAND) for (let i = 3; i >= 1; i--) drawNib(-i * 26 * fall, 0.18 * nibIn * fall / i);
+      drawNib(0, nibIn);
+    }
+    ctx.restore();
+
+    if (t > LAND && t < LAND + 0.7) {
+      const k = prog(t, LAND, LAND + 0.7);
+      ctx.save(); ctx.globalCompositeOperation = 'lighter';
+      ctx.strokeStyle = `rgba(150,130,255,${0.7 * (1 - k)})`;
+      ctx.lineWidth = 10 * (1 - k) + 1;
+      ctx.beginPath(); ctx.ellipse(706, 600, 40 + 520 * outCubic(k), 14 + 170 * outCubic(k), 0, 0, Math.PI * 2); ctx.stroke();
+      ctx.restore();
+    }
+
+    const sw = prog(t, 2.05, 2.95);
+    if (sw > 0 && sw < 1) {
+      const g = SWEEP.getContext('2d');
+      g.globalCompositeOperation = 'source-over'; g.clearRect(0, 0, 704, 704);
+      const x = -300 + 1300 * outCubic(sw);
+      const lg = g.createLinearGradient(x - 120, 0, x + 120, 704 * 0.35);
+      lg.addColorStop(0, 'rgba(255,255,255,0)'); lg.addColorStop(0.5, 'rgba(235,228,255,0.9)'); lg.addColorStop(1, 'rgba(255,255,255,0)');
+      g.fillStyle = lg; g.fillRect(0, 0, 704, 704);
+      g.globalCompositeOperation = 'destination-in'; g.drawImage(IMG.mask, 0, 0);
+      ctx.save(); ctx.globalCompositeOperation = 'lighter';
+      ctx.globalAlpha = 0.5 * Math.sin(Math.PI * sw);
+      ctx.drawImage(SWEEP, 0, 0, U, U);
+      ctx.restore();
+    }
+  }
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let t = 0, last = null, running = false;
+  function tick(now) {
+    if (last != null) t += (now - last) / 1000;
+    last = now;
+    if (t >= END_HOLD) { t = END_HOLD; render(t); running = false; return; }
+    render(t);
+    requestAnimationFrame(tick);
+  }
+  function play() { if (running) return; running = true; t = 0; last = null; requestAnimationFrame(tick); }
+
+  Promise.all([load('assets/sting/base.webp'), load('assets/sting/nib.png'), load('assets/sting/mask.png')]).then(([base, nib, mask]) => {
+    // the source art is lit on black: turn black into transparency so the logo sits on the page itself
+    const keyed = document.createElement('canvas'); keyed.width = keyed.height = U;
+    const kc = keyed.getContext('2d'); kc.drawImage(base, 0, 0);
+    try {
+      const px = kc.getImageData(0, 0, U, U), d = px.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const a = Math.max(d[i], d[i + 1], d[i + 2]);
+        if (a) { const k = 255 / a; d[i] *= k; d[i + 1] *= k; d[i + 2] *= k; }
+        d[i + 3] = a;
+      }
+      kc.putImageData(px, 0, 0);
+    } catch (e) {}
+    base = keyed;
+    IMG = { base, nib, mask };
+    BLOOM = document.createElement('canvas'); BLOOM.width = BLOOM.height = 704;
+    const b = BLOOM.getContext('2d'); if (hasFilter) b.filter = 'blur(28px)'; b.drawImage(base, 0, 0, 704, 704);
+    SWEEP = document.createElement('canvas'); SWEEP.width = SWEEP.height = 704;
+    render(END_HOLD);                       // complete logo at rest
+    if (reduce) return;
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) play(); }), { threshold: 0.6 }).observe(cv);
+    } else play();
+    cv.addEventListener('click', play);
+  }).catch(() => { cv.replaceWith(Object.assign(new Image(), { src: 'assets/logo.png', alt: '', className: 'sting-fallback' })); });
 })();
 </script>
 
