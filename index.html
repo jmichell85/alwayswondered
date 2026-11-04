@@ -437,9 +437,86 @@ function renderSocials(){
   document.getElementById("footSocial").innerHTML = SOCIALS.filter(s=>s.url).map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a>`).join("");
 }
 
+/* Scrolling questions: a new mix every day.
+   Each day the page picks 2 questions from every category below (14 total),
+   using the date as the seed, so every visitor sees the same set that day and it changes at midnight.
+   To add or remove questions, just edit these lists. */
+const TICKER_TOPICS = {
+  body: [
+    "Why do you get goosebumps","Why can't you tickle yourself","What happens to your body when you don't sleep",
+    "Why do your fingers wrinkle in water","Why do you get brain freeze","Why do you hiccup",
+    "What happens when you crack your knuckles","Why does your stomach growl","Why do you sneeze when you look at the sun",
+    "Why do you yawn when others yawn","Why does your foot fall asleep","How long can you survive without water",
+    "Why do onions make you cry","Why do you get a stitch when you run","What actually happens when you faint",
+    "Why do your ears pop on a plane","Why is your blood red but your veins look blue","Why do you get dizzy when you spin",
+    "Why does hair turn gray","Why do you have fingerprints","What happens to food after you swallow it",
+    "Why do some people never get sick","How much of your body is replaced every year","Why do you shiver when you're cold"
+  ],
+  mind: [
+    "Why does time feel faster as you get older","Why do you forget why you walked into a room","What is déjà vu",
+    "Why do you dream","Why do you remember embarrassing moments forever","Why can't you remember being a baby",
+    "Why do songs get stuck in your head","Why does your own voice sound weird on recordings","Why do you jump when you're falling asleep",
+    "Why is it so hard to break a habit","Why do you feel someone staring at you","Why do you hate the sound of your own chewing",
+    "Why do some memories feel brand new years later","Why do you see faces in random objects","Why does boredom feel so painful",
+    "Why do you talk to yourself","Why do you procrastinate even when you want to finish","Why does music give you chills",
+    "Why do smells trigger old memories","Why do you laugh when you're nervous","Why does a word stop sounding real if you repeat it"
+  ],
+  space: [
+    "What happens if you fall into a black hole","Why is the sky dark at night","How big is the universe really",
+    "What would happen if the Moon disappeared","Why do planets spin","What happens to your body in space",
+    "How do we know how old the universe is","Why is Mars red","Could we ever travel faster than light",
+    "What is at the center of the Milky Way","Why don't we feel the Earth spinning","How long would it take to walk to the Moon",
+    "What happens when a star dies","Why does the Moon always show the same face","Is there sound in space",
+    "What if the Sun went out right now","Why is Venus hotter than Mercury","How do astronauts sleep",
+    "What is dark matter","Why is Saturn the only planet with big rings","How far could you see if the Earth were flat"
+  ],
+  history: [
+    "How were the pyramids really built","Why did the Roman Empire fall","How did sailors navigate before GPS",
+    "How did people tell time before clocks","Why did the Library of Alexandria disappear","How did Vikings cross the Atlantic",
+    "Who drew the first map of the world","How did ancient people make fire","Why are there 7 days in a week",
+    "How did people brush their teeth before toothbrushes","Why did the Titanic actually sink","How did castles stop invaders",
+    "How did medieval people stay warm in winter","Why did the Mayans abandon their cities","How did ancient Romans build roads that still last",
+    "What did people eat before refrigerators","How was the Great Wall of China built","Why do we shake hands",
+    "How did messages travel before the mail","Why did knights wear armor that heavy","How did the first city begin",
+    "Why does a year have 12 months","How did people survive the Black Death"
+  ],
+  nature: [
+    "Why do cats purr","How do bees know where home is","How do birds know where to migrate",
+    "Why do zebras have stripes","How do octopuses change color","Why do dogs tilt their heads",
+    "How do fish breathe underwater","Why don't spiders stick to their own webs","How do salmon find their way home",
+    "Why do fireflies glow","How smart are crows really","Why do leaves change color in fall",
+    "How do trees talk to each other","Why do flamingos stand on one leg","How do sharks sense blood",
+    "Why do cats always land on their feet","How do chameleons see in two directions","Why do whales sing",
+    "How long do trees live","Why do mosquitoes bite some people more","How do ants find food so fast"
+  ],
+  everyday: [
+    "How does a plane actually stay up","How does your phone know where you are","How does Wi-Fi travel through walls",
+    "Why do mirrors flip left and right but not up and down","How does a microwave heat food","Why is the ocean salty",
+    "How do noise-canceling headphones work","Why is the sky blue","How does a fridge make things cold",
+    "Why does ice float","How do touchscreens know where you tap","Why does popcorn pop",
+    "How does a battery store power","Why do clocks go clockwise","How does a camera capture light",
+    "Why do we have leap years","How does GPS work without internet","Why is a keyboard not in ABC order",
+    "How does soap actually clean","Why are stop signs red","How do elevators know where to stop"
+  ],
+  earth: [
+    "Where does a lightning bolt start","Could you dig through the Earth","Why do volcanoes erupt",
+    "How do rainbows form","Why is the Dead Sea so salty","What causes earthquakes",
+    "Why is the deepest part of the ocean so hard to reach","How do clouds float","Why do we have seasons",
+    "How are diamonds made","Why does the wind blow","What would happen if all the ice melted",
+    "How do hurricanes form","Why is Antarctica a desert","How old is the water you drink",
+    "Why does thunder come after lightning","How deep is the ocean really","Why are some sand beaches pink",
+    "What's inside the Earth's core","Why do some places never get rain","How do caves form"
+  ]
+};
+
 function renderTicker(){
-  const qs = ["How were the pyramids really built","Why do your fingers wrinkle in water","How did sailors navigate before GPS","Where does a lightning bolt start","Why did the Roman Empire fall","Why do you yawn when others yawn","How did people tell time before clocks","Why is the ocean salty","Who drew the first map of the world","How do bees know where home is","Why did the Library of Alexandria disappear","Could you dig through the Earth","How did Vikings cross the Atlantic","Why do cats purr"];
-  const row = qs.map(q=>`<span>${q.toUpperCase()}</span>`).join("");
+  const now = new Date();
+  let seed = Math.floor(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 864e5); // changes once a day
+  const rand = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+  const pick = (list, n) => { const a = list.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a.slice(0, n); };
+  const groups = Object.values(TICKER_TOPICS).map(list => pick(list, 2));
+  const qs = pick([].concat(...groups), 14); // mix the categories together
+  const row = qs.map(q=>`<span>${esc(q.toUpperCase())}</span>`).join("");
   document.getElementById("ticker").innerHTML = row + row;
 }
 
