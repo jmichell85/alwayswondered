@@ -146,6 +146,23 @@ section.block{padding-block:88px}
 .example small{display:block;font-family:var(--f-display);font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;color:var(--orchid);margin-bottom:10px}
 .example em{font-style:normal;font-weight:500;color:#fff;text-shadow:0 0 16px rgba(139,77,255,.8)}
 
+/* ---------- reels ---------- */
+.reels{padding-top:0}
+.reel-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px}
+.reel{position:relative;display:block;aspect-ratio:9/16;max-width:100%;border-radius:16px;overflow:hidden;text-decoration:none;border:1px solid rgba(255,255,255,.12);background:var(--panel);box-shadow:0 18px 40px rgba(0,0,0,.5);transition:transform .25s ease,box-shadow .25s ease;min-width:0}
+.reel:hover{transform:translateY(-4px);box-shadow:0 0 0 1px rgba(192,124,255,.6),0 0 34px rgba(139,77,255,.55)}
+.reel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.reel::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(4,3,12,.85))}
+.reel .cap{position:absolute;left:12px;right:12px;bottom:12px;z-index:1;font-size:.82rem;line-height:1.35;color:#fff;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.reel .rico{position:absolute;top:10px;right:10px;z-index:1;width:26px;height:26px;opacity:.95;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))}
+.reel.cta{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:18px;text-align:center;border-style:dashed;border-color:var(--rim)}
+.reel.cta::after{display:none}
+.reel.cta svg{width:64px;height:64px}
+.reel.cta b{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:1.05rem;color:var(--star)}
+.reel.cta small{color:var(--mist);font-size:.82rem}
+@media (max-width:1000px){.reel-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){.reel-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
+
 /* ---------- socials ---------- */
 .socials{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
 .soc{position:relative;display:flex;flex-direction:column;gap:14px;padding:26px 24px 24px;border-radius:20px;text-decoration:none;background:var(--panel);border:1px solid var(--rim);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:transform .25s ease,border-color .25s,box-shadow .25s;min-width:0;overflow:hidden}
@@ -201,6 +218,7 @@ footer a:hover{color:var(--star)}
     </a>
     <nav class="nav" aria-label="Main">
       <a href="#videos">Videos</a>
+      <a href="#reels">Reels</a>
       <a href="#follow">Follow</a>
       <a href="#about">About</a>
       <a class="btn sm" href="https://www.youtube.com/@AlwaysWonderedReal?sub_confirmation=1" target="_blank" rel="noopener">Subscribe</a>
@@ -243,6 +261,20 @@ footer a:hover{color:var(--star)}
     </div>
   </section>
 
+
+  <section class="block reels" id="reels" hidden>
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="label">On Instagram</p>
+          <h2>Latest Reels</h2>
+          <p>Quick answers in under a minute. Tap one to watch it on Instagram.</p>
+        </div>
+        <a class="btn ghost sm" href="https://www.instagram.com/alwayswonderedreal/" target="_blank" rel="noopener">Follow on Instagram</a>
+      </div>
+      <div class="reel-grid" id="reelGrid"></div>
+    </div>
+  </section>
 
   <section class="block" id="follow">
     <div class="wrap">
@@ -525,6 +557,36 @@ function renderTicker(){
 
 document.getElementById("yr").textContent = new Date().getFullYear();
 renderVideos(); renderSocials(); renderTicker();
+
+/* Latest Instagram Reels.
+   Paste your Behold feed link (behold.so → your feed → "JSON feed URL") between the quotes below.
+   New Reels then appear here automatically. Until it's set (or if the feed is empty), the Reels section stays hidden. */
+const REELS_FEED_URL = "";
+const REELS_MAX = 5;
+(function(){
+  const grid = document.getElementById("reelGrid"); if (!grid) return;
+  const igIcon = ICONS.instagram;
+  const cta = `<a class="reel cta" href="https://www.instagram.com/alwayswonderedreal/" target="_blank" rel="noopener">${igIcon}<b>Watch on Instagram</b><small>@alwayswonderedreal</small></a>`;
+  const sec = document.getElementById("reels"), nav = document.querySelector('.nav a[href="#reels"]');
+  const show = on => { sec.hidden = !on; if (nav) nav.hidden = !on; };
+  show(false);
+  if (!REELS_FEED_URL) return;
+  fetch(REELS_FEED_URL).then(r => r.ok ? r.json() : null).then(d => {
+    const posts = Array.isArray(d) ? d : (d && d.posts) || [];
+    const reels = posts.filter(p => p.isReel || p.mediaType === "VIDEO").slice(0, REELS_MAX);
+    if (!reels.length) return;
+    const pic = p => (p.sizes && (p.sizes.medium || p.sizes.large || p.sizes.small || {}).mediaUrl) || p.thumbnailUrl || p.mediaUrl || "";
+    let html = reels.map(p => `<a class="reel" href="${esc(p.permalink || "https://www.instagram.com/alwayswonderedreal/")}" target="_blank" rel="noopener">
+        <img src="${esc(pic(p))}" alt="" loading="lazy">
+        <span class="rico">${igIcon}</span>
+        ${(p.prunedCaption || p.caption) ? `<span class="cap">${esc(p.prunedCaption || p.caption)}</span>` : ""}
+      </a>`).join("");
+    if (reels.length < REELS_MAX) html += cta;
+    grid.innerHTML = html;
+    show(true);
+  }).catch(() => {});
+})();
+
 
 /* Newest uploads: videos.json is refreshed from the YouTube channel every few hours by a GitHub Action. */
 fetch("videos.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(list=>{
