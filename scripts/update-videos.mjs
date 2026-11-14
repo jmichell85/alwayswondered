@@ -1,7 +1,7 @@
 // Pulls the newest long-form uploads (no Shorts) from the Always Wondered YouTube channel into videos.json.
 import { readFile, writeFile } from "node:fs/promises";
 
-const CHANNEL_ID = "UCRFXiVXBZzgsHrT8ijXUspw"; // @AlwaysWonderedReal
+const CHANNEL_ID = "UCSDNShX98UxaYIChgeaXkKg"; // @alwayswondered_real
 const MAX = 6;
 
 const decode = s => s.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'");

@@ -221,7 +221,7 @@ footer a:hover{color:var(--star)}
       <a href="#reels">Reels</a>
       <a href="#follow">Follow</a>
       <a href="#about">About</a>
-      <a class="btn sm" href="https://www.youtube.com/@AlwaysWonderedReal?sub_confirmation=1" target="_blank" rel="noopener">Subscribe</a>
+      <a class="btn sm" href="https://www.youtube.com/@alwayswondered_real?sub_confirmation=1" target="_blank" rel="noopener">Subscribe</a>
     </nav>
   </div>
 </header>
@@ -233,7 +233,7 @@ footer a:hover{color:var(--star)}
       <h1>The questions you've <span class="glow">always wondered</span> about</h1>
       <p class="lede">Animated explainers on space, the human body, history, the mind and everyday mysteries. One question per video. A real answer that's stranger than you thought.</p>
       <div class="ctas">
-        <a class="btn" href="https://www.youtube.com/@AlwaysWonderedReal" target="_blank" rel="noopener">
+        <a class="btn" href="https://www.youtube.com/@alwayswondered_real" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8ZM9.75 15.02V8.98L15.5 12l-5.75 3.02Z"/></svg>
           Watch on YouTube
         </a>
@@ -255,7 +255,7 @@ footer a:hover{color:var(--star)}
           <h2>Latest videos</h2>
           <p>Fresh out of the studio. Tap any episode to watch it on YouTube.</p>
         </div>
-        <a class="btn ghost sm" href="https://www.youtube.com/@AlwaysWonderedReal/videos" target="_blank" rel="noopener">All videos</a>
+        <a class="btn ghost sm" href="https://www.youtube.com/@alwayswondered_real/videos" target="_blank" rel="noopener">All videos</a>
       </div>
       <div class="grid" id="videoGrid"></div>
     </div>
@@ -306,7 +306,7 @@ footer a:hover{color:var(--star)}
     <div class="wrap">
       <canvas id="sting" width="720" height="720" role="img" aria-label="Always Wondered logo"></canvas>
       <h2>If you've always wondered, you're in the <span class="glow">right place</span></h2>
-      <a class="btn" href="https://www.youtube.com/@AlwaysWonderedReal?sub_confirmation=1" target="_blank" rel="noopener">Subscribe on YouTube</a>
+      <a class="btn" href="https://www.youtube.com/@alwayswondered_real?sub_confirmation=1" target="_blank" rel="noopener">Subscribe on YouTube</a>
     </div>
   </section>
 </main>
@@ -326,7 +326,7 @@ footer a:hover{color:var(--star)}
 
 /* Social accounts. Leave url as "" to show "Coming soon". */
 const SOCIALS = [
-  { key:"youtube",   name:"YouTube",   handle:"@AlwaysWonderedReal", url:"https://www.youtube.com/@AlwaysWonderedReal", color:"#FF3B4E", cta:"Full episodes" },
+  { key:"youtube",   name:"YouTube",   handle:"@alwayswondered_real", url:"https://www.youtube.com/@alwayswondered_real", color:"#FF3B4E", cta:"Full episodes" },
   { key:"tiktok",    name:"TikTok",    handle:"@alwayswonderedreal", url:"https://www.tiktok.com/@alwayswonderedreal", color:"#1FC8D8", cta:"60-second answers" },
   { key:"instagram", name:"Instagram", handle:"@alwayswonderedreal", url:"https://www.instagram.com/alwayswonderedreal/", color:"#C04CFF", cta:"Reels + behind the scenes" },
   { key:"facebook",  name:"Facebook",  handle:"Always Wondered",     url:"https://www.facebook.com/share/1F7hbmGRv2/", color:"#3B6CFF", cta:"Episodes + community" }
@@ -334,7 +334,7 @@ const SOCIALS = [
 
 /* Latest videos, newest first. The first one is featured large.
    On the live site these are replaced automatically by videos.json, which a
-   GitHub Action pulls from youtube.com/@AlwaysWonderedReal every few hours.
+   GitHub Action pulls from youtube.com/@alwayswondered_real every few hours.
    Add a "length" here if you want a duration badge on a video. */
 const VIDEOS = [
   { id:"mxwy4RGiLXU", title:"Why Time Feels Faster as You Get Older (It's Not What You Think)", length:"5:48" }
@@ -443,7 +443,7 @@ function renderVideos(){
     </a>`;
   }).join("");
   if(list.length < 3){
-    html += `<a class="card next" href="https://www.youtube.com/@AlwaysWonderedReal?sub_confirmation=1" target="_blank" rel="noopener">
+    html += `<a class="card next" href="https://www.youtube.com/@alwayswondered_real?sub_confirmation=1" target="_blank" rel="noopener">
       <div class="thumb nextbox"><img src="assets/wonderer/thinking.svg" alt=""><b>Next question loading</b><small>New episodes every week. Subscribe so you don't miss one.</small></div>
     </a>`;
   }
